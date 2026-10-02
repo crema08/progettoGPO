@@ -1,0 +1,102 @@
+% Diagramma dei casi d'uso - HomeStock
+% Compila con pdfLaTeX (funziona anche su Overleaf)
+\documentclass[tikz,border=12pt]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[italian]{babel}
+\usepackage{lmodern}
+\usetikzlibrary{shapes.geometric, arrows.meta, backgrounds}
+
+\definecolor{hsteal}{HTML}{0E8F89}
+\definecolor{hsink}{HTML}{16211E}
+\definecolor{hsgrey}{HTML}{66706B}
+
+\tikzset{
+  % caso d'uso
+  uc/.style={ellipse, draw=hsteal, line width=1pt, fill=white,
+             minimum width=4.6cm, minimum height=1.1cm,
+             text width=3.7cm, align=center, font=\small},
+  % attore: nodo invisibile a cui si collegano le linee
+  attore/.style={inner sep=0pt, minimum width=0.8cm, minimum height=1.5cm},
+  % associazione attore - caso d'uso
+  assoc/.style={draw=hsgrey, line width=0.6pt},
+  % include / extend
+  rel/.style={draw=hsink, line width=0.9pt, dash pattern=on 7pt off 4pt,
+              -{Straight Barb[length=3.5mm, width=3mm]}},
+  etichetta/.style={font=\footnotesize\itshape, fill=white, inner sep=1.5pt},
+  % omino stilizzato
+  omino/.pic={
+    \draw[hsink, line width=1pt]
+      (0,0.52) circle (0.2)
+      (0,0.32) -- (0,-0.2)
+      (-0.36,0.14) -- (0.36,0.14)
+      (0,-0.2) -- (-0.28,-0.68)
+      (0,-0.2) -- (0.28,-0.68);
+  }
+}
+
+\newcommand{\attore}[3]{% nome nodo, posizione, etichetta
+  \node[attore] (#1) at (#2) {};
+  \pic at (#1) {omino};
+  \node[font=\small\bfseries, below=0.78cm, align=center] at (#1) {#3};
+}
+
+\begin{document}
+\begin{tikzpicture}
+
+% ---------- confine del sistema ----------
+\draw[hsink, line width=1pt, rounded corners=4pt] (-3.0,1.6) rectangle (10.2,-15.2);
+\node[font=\large\bfseries] at (3.6,1.05) {HomeStock};
+
+% ---------- casi d'uso: colonna principale ----------
+\node[uc] (reg)   at (0,   0.00) {Registrazione e accesso};
+\node[uc] (loc)   at (0,  -1.55) {Organizzazione per luogo};
+\node[uc] (man)   at (0,  -3.10) {Aggiunta manuale prodotti};
+\node[uc] (exp)   at (0,  -4.65) {Date di scadenza};
+\node[uc] (inv)   at (0,  -6.20) {Visualizzazione inventario};
+\node[uc] (qta)   at (0,  -7.75) {Gestione quantità};
+\node[uc] (spesa) at (0,  -9.30) {Lista della spesa};
+\node[uc] (ric)   at (0, -10.85) {Suggerimento ricette};
+\node[uc] (cond)  at (0, -12.40) {Condivisione familiare};
+\node[uc] (prem)  at (0, -13.95) {Premium};
+
+% ---------- casi d'uso: estensioni e inclusioni ----------
+\node[uc] (scan)  at (7.2,  -3.10) {Scansione codice a barre};
+\node[uc] (notif) at (7.2,  -4.65) {Avvisi e notifiche};
+\node[uc] (cerca) at (7.2,  -6.20) {Ricerca e ordinamento};
+\node[uc] (trasf) at (7.2,  -9.30) {Trasferimento in dispensa};
+\node[uc] (ingr)  at (7.2, -10.85) {Ingredienti disponibili e mancanti};
+\node[uc] (prio)  at (7.2, -12.40) {Priorità ai prodotti in scadenza};
+\node[uc] (stat)  at (7.2, -13.95) {Statistiche e spreco};
+
+% ---------- attori ----------
+\attore{visitatore}{-6.2, -0.4}{Visitatore}
+\attore{utente}{-6.2, -5.6}{Utente}
+\attore{membro}{-6.2, -9.6}{Membro\\famiglia}
+\attore{premium}{12.4, -13.95}{Utente\\Premium}
+
+% ---------- associazioni (sotto le ellissi) ----------
+\begin{pgfonlayer}{background}
+\draw[assoc] (visitatore) -- (reg);
+
+\foreach \u in {reg, loc, man, exp, inv, qta, spesa, ric, cond, prem}
+  \draw[assoc] (utente) -- (\u);
+
+\foreach \u in {man, inv, qta, spesa, cond}
+  \draw[assoc] (membro) -- (\u);
+
+\draw[assoc] (premium) -- (stat);
+\end{pgfonlayer}
+
+% ---------- extend: dall'estensione verso il caso base ----------
+\draw[rel] (scan)  -- node[etichetta, above] {«extend»} (man);
+\draw[rel] (notif) -- node[etichetta, above] {«extend»} (exp);
+\draw[rel] (cerca) -- node[etichetta, above] {«extend»} (inv);
+\draw[rel] (trasf) -- node[etichetta, above] {«extend»} (spesa);
+
+% ---------- include: dal caso base verso quello incluso ----------
+\draw[rel] (ric) -- node[etichetta, above] {«include»} (ingr);
+\draw[rel] (ric) -- node[etichetta, sloped, above] {«include»} (prio);
+
+\end{tikzpicture}
+\end{document}
