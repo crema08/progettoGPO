@@ -1,0 +1,105 @@
+\documentclass[a4paper]{article}
+\usepackage[a4paper, landscape, margin=1cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{adjustbox}
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows, fit, calc, positioning}
+\usepackage{tikz-uml}
+\tikzumlset{fill class=white, text=black, draw=black}
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+{\Large Diagramma delle classi -- HomeStock}
+
+\vspace{0.4cm}
+\begin{adjustbox}{max width=\textwidth, max totalheight=0.9\textheight}
+\begin{tikzpicture}
+
+% ================= UTENTI E CASA =================
+\umlclass[x=0, y=0]{Utente}{
+  Nome : string \\ Email : string \\ Password : string \\
+  NotificheAttive : bool \\ GiorniPreavviso : int}{
+  registrati(email : string, password : string) : void \\
+  accedi(email : string, password : string) : bool \\
+  creaCasa(nome : string) : Casa \\
+  impostaNotifiche(attive : bool, giorni : int) : void \\
+  attivaPremium() : void}
+
+\umlclass[x=0, y=-10]{UtentePremium}{FineAbbonamento : date}{
+  statisticheSpreco(da : date, a : date) : float}
+\umlinherit{UtentePremium}{Utente}
+
+\umlclass[x=12, y=0]{Casa}{Nome : string}{
+  aggiungiPosizione(nome : string) : Posizione \\
+  invitaMembro(email : string) : void \\
+  cercaProdotti(testo : string, ordine : string) : Prodotto[*] \\
+  prodottiInScadenza(giorni : int) : Prodotto[*] \\
+  ricetteSuggerite() : Ricetta[*]}
+
+\umlassoc[name=app, mult1=1..*, mult2=*]{Utente}{Casa}
+\umlassocclass[x=6, y=-4.5]{Appartenenza}{app-1}{
+  Ruolo : string \\ DataIngresso : date}{}
+
+% ================= LISTA DELLA SPESA =================
+\umlclass[x=23, y=0]{ListaSpesa}{}{
+  aggiungi(nome : string, quantita : float) : VoceSpesa \\
+  aggiungiMancanti(r : Ricetta) : void}
+\umlcompo[mult1=1, mult2=1]{Casa}{ListaSpesa}
+
+\umlclass[x=33, y=0]{VoceSpesa}{
+  Nome : string \\ Quantita : float \\ Acquistata : bool}{
+  segnaAcquistata() : void \\
+  trasferisciIn(p : Posizione) : Prodotto}
+\umlcompo[mult1=1, mult2=*]{ListaSpesa}{VoceSpesa}
+
+% ================= POSIZIONI E PRODOTTI =================
+\umlclass[x=12, y=-8]{Posizione}{Nome : string}{
+  aggiungiProdotto(nome : string, quantita : float, scadenza : date) : Prodotto \\
+  elencoProdotti() : Prodotto[*]}
+\umlcompo[mult1=1, mult2=1..*]{Casa}{Posizione}
+
+\umlclass[x=12, y=-15]{Prodotto}{
+  Nome : string \\ Quantita : float \\ Unita : string \\
+  Scadenza : date \\ Marca : string}{
+  aumenta(q : float) : void \\
+  diminuisci(q : float) : void \\
+  spostaIn(p : Posizione) : void \\
+  giorniAllaScadenza() : int}
+\umlcompo[mult1=1, mult2=*]{Posizione}{Prodotto}
+
+\umlclass[x=0, y=-16]{Categoria}{
+  Nome : string \\ GiorniConservazione : int}{
+  scadenzaSuggerita() : date}
+\umlassoc[mult1=*, mult2=1]{Prodotto}{Categoria}
+
+\umlclass[x=12, y=-24]{Movimento}{
+  Tipo : string \\ Quantita : float \\ Data : date}{}
+\umlcompo[mult1=1, mult2=*]{Prodotto}{Movimento}
+
+\umlclass[x=0, y=-24]{SchedaProdotto}{
+  CodiceABarre : string \\ Nome : string \\ Marca : string \\ Immagine : string}{
+  cercaPerCodice(codice : string) : SchedaProdotto}
+\umlassoc[mult1=*, mult2=0..1]{Prodotto}{SchedaProdotto}
+
+% ================= RICETTE =================
+\umlclass[x=23, y=-15]{Ingrediente}{
+  Nome : string \\ Sinonimi : string[*] \\ DiBase : bool}{
+  riconosce(p : Prodotto) : bool}
+\umlassoc[mult1=*, mult2=0..1]{Prodotto}{Ingrediente}
+
+\umlclass[x=33, y=-15]{Ricetta}{
+  Titolo : string \\ Minuti : int \\ Porzioni : int \\ Passaggi : string[*]}{
+  disponibilita(c : Casa) : float \\
+  ingredientiMancanti(c : Casa) : Ingrediente[*] \\
+  usaProdottiInScadenza(c : Casa) : bool}
+\umlassoc[name=riga, mult1=1..*, mult2=*]{Ingrediente}{Ricetta}
+\umlassocclass[x=28, y=-21]{RigaRicetta}{riga-1}{Quantita : string}{}
+
+\end{tikzpicture}
+\end{adjustbox}
+\end{center}
+
+\end{document}
