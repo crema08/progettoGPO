@@ -24,11 +24,6 @@ Autore: Tommaso Cremaschi.
 13. [Linee guida grafiche](#13-linee-guida-grafiche)
 14. [Tecnologie](#14-tecnologie)
 15. [Versione gratuita e Premium](#15-versione-gratuita-e-premium)
-16. [Roadmap](#16-roadmap)
-17. [Rischi tecnici](#17-rischi-tecnici)
-18. [Costi](#18-costi)
-19. [Struttura della repository](#19-struttura-della-repository)
-20. [Fonti](#20-fonti)
 
 ---
 
@@ -369,79 +364,3 @@ Alla prima apertura: schermata di presentazione («La tua casa, sempre sotto con
 | Ricette base | Prodotti illimitati, filtri e ricette avanzate |
 
 Il sistema di pagamento non fa parte della prima versione, ma il modello dati è già pronto (classe `UtentePremium`).
-
----
-
-## 16. Roadmap
-
-| Fase | Contenuto | Durata stimata |
-|---|---|---|
-| 0 | Validazione dell'idea, analisi concorrenti, scelta stack, apertura account Google Play | 2–3 giorni |
-| 1 | Setup tecnico: progetto Expo, Supabase, navigazione, stile base | 2–3 giorni |
-| 2 | Account, database, sicurezza (RLS), strategia offline | 3–5 giorni |
-| 3 | Dispensa: posizioni, inserimento manuale, quantità, scadenze, Home | 1–2 settimane |
-| 4 | Scanner con Open Food Facts e modalità a raffica | 4–6 giorni |
-| 5 | Lista della spesa e trasferimento in dispensa | 3–4 giorni |
-| 6 | Ricette: ingredienti canonici, 60–80 ricette, confronto con la dispensa | 1–2 settimane |
-| 7 | Notifiche locali | 2–3 giorni |
-| 8 | Rifinitura, onboarding, privacy (GDPR), test con utenti | 1 settimana |
-| 9 | Pubblicazione: test chiuso Google Play (12 tester per 14 giorni), revisione Apple | 3–4 settimane |
-| 10 | Dopo il lancio: misura della retention, poi progettazione del Premium | continuo |
-
-**Stato attuale:** analisi completata (funzionalità, attori, ordinamenti, diagramma dei casi d'uso, diagramma delle classi) e primo prototipo web in un singolo file HTML con inventario, scadenze, scansione, lista della spesa e ricette.
-
----
-
-## 17. Rischi tecnici
-
-| Rischio | Mitigazione |
-|---|---|
-| L'utente smette di aggiornare le quantità dopo due settimane | Consumo con un tocco dalla Home, scansione a raffica, notifiche al momento giusto |
-| Il codice a barre **non contiene la data di scadenza** | Scadenza suggerita per categoria, da confermare o correggere |
-| Prodotti italiani non riconosciuti da Open Food Facts | Prova anticipata su prodotti reali; inserimento manuale collegato al codice per le volte successive |
-| Collegamento prodotto → ingrediente delle ricette | Tabella di ingredienti canonici con sinonimi e correzione manuale |
-| Dati di tutti gli utenti esposti | Row Level Security su ogni tabella, basata sull'appartenenza alla casa |
-| Uso al supermercato senza rete | Lettura da cache locale e coda di scritture da sincronizzare |
-
----
-
-## 18. Costi
-
-| Voce | Costo |
-|---|---|
-| Google Play Console | 25 $ una tantum |
-| Apple Developer Program | circa 99 € l'anno (solo per iOS) |
-| Supabase | 0 € con il piano gratuito |
-| Open Food Facts | 0 € |
-| Expo EAS | 0 € con le build in coda |
-
----
-
-## 19. Struttura della repository
-
-```
-progettoGPO/
-├── README.md                     questo documento
-├── diagrammi/
-│   ├── DiagrammaCasiUso.tex      sorgente LaTeX (tikz-uml)
-│   ├── DiagrammaCasiUso.pdf
-│   ├── DiagrammaCasiUso.png
-│   ├── DiagrammaClassi.tex       sorgente LaTeX (tikz-uml)
-│   ├── DiagrammaClassi.pdf
-│   ├── DiagrammaClassi.png
-│   └── tikz-uml.sty              pacchetto necessario per compilare i diagrammi
-└── DRAFT/                        materiale di lavoro
-```
-
-**Compilare i diagrammi:** su Overleaf carica il file `.tex` insieme a `tikz-uml.sty` e compila con pdfLaTeX.
-
----
-
-## 20. Fonti
-
-- [Spreco alimentare, scende sotto i 500 grammi a testa a settimana — Dalla Platea (Waste Watcher, autunno 2026)](https://www.dallaplatea.it/2026/09/24/spreco-alimentare-scende-sotto-i-500-grammi-a-testa-a-settimana/)
-- [Rapporto Waste Watcher International 2026 — Confcommercio](https://www.confcommercio.it/-/fipe-osservatorio-waste-watcher)
-- [Spreco alimentare, il buco nel frigorifero — QuiFinanza](https://quifinanza.it/lifestyle/food-economy/spreco-alimentare-cibo-conto-nascosto/1012939/)
-- [Spreco alimentare in Italia, Boomers più virtuosi — Spazio50](https://www.spazio50.org/spreco-alimentare-in-italia-boomers-piu-virtuosi-i-dati-del-rapporto-waste-watcher-2026/)
-- [Open Food Facts — documentazione API e licenza](https://openfoodfacts.github.io/openfoodfacts-server/api/)
-- [Google Play — requisiti di test per i nuovi account sviluppatore](https://support.google.com/googleplay/android-developer/answer/14151465?hl=it)
