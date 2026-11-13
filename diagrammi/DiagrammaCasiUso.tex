@@ -1,0 +1,87 @@
+\documentclass[a4paper]{article}
+\usepackage[a4paper, margin=1cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows, fit, calc, positioning}
+\usepackage{tikz-uml}
+\tikzumlset{actor below=0.4cm, fill usecase=white, fill class=white, text=black, draw=black}
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+{\Large Diagramma dei casi d'uso -- HomeStock}
+
+\vspace{0.6cm}
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}
+
+\begin{umlsystem}[x=0, y=0]{HomeStock}
+  % casi d'uso principali
+  \umlusecase[x=0, y=0,     name=reg,   width=4cm]{Registrazione e accesso}
+  \umlusecase[x=0, y=-1.8,  name=man,   width=4cm]{Aggiunta manuale prodotti}
+  \umlusecase[x=0, y=-3.6,  name=exp,   width=4cm]{Date di scadenza}
+  \umlusecase[x=0, y=-5.4,  name=inv,   width=4cm]{Visualizzazione inventario}
+  \umlusecase[x=0, y=-7.2,  name=qta,   width=4cm]{Gestione quantità}
+  \umlusecase[x=0, y=-9.0,  name=spesa, width=4cm]{Lista della spesa}
+  \umlusecase[x=0, y=-10.8, name=ric,   width=4cm]{Suggerimento ricette}
+  \umlusecase[x=0, y=-12.6, name=cond,  width=4cm]{Condivisione familiare}
+  \umlusecase[x=0, y=-14.4, name=loc,   width=4cm]{Organizzazione per luogo}
+  \umlusecase[x=0, y=-16.2, name=prem,  width=4cm]{Premium}
+  \umlusecase[x=0, y=-18.0, name=stat,  width=4cm]{Statistiche e spreco}
+  % casi d'uso raggiunti tramite include ed extend
+  \umlusecase[x=10, y=-1.8,  name=scan,  width=4cm]{Scansione codice a barre}
+  \umlusecase[x=10, y=-3.6,  name=notif, width=4cm]{Avvisi e notifiche}
+  \umlusecase[x=10, y=-5.4,  name=cerca, width=4cm]{Ricerca e ordinamento}
+  \umlusecase[x=10, y=-9.0,  name=trasf, width=4cm]{Trasferimento in dispensa}
+  \umlusecase[x=10, y=-10.8, name=ingr,  width=5.2cm]{Ingredienti disponibili e mancanti}
+  \umlusecase[x=10, y=-12.6, name=prio,  width=4cm]{Priorità ai prodotti in scadenza}
+\end{umlsystem}
+
+% attori
+\umlactor[x=-8, y=0.2]{Visitatore}
+\umlactor[x=-8, y=-5.6]{Membro famiglia}
+\umlactor[x=-8, y=-14.6]{Utente}
+\umlactor[x=-8, y=-19.6]{Utente Premium}
+
+% generalizzazione tra attori:
+% l'Utente (proprietario della casa) fa tutto quello che fa un Membro famiglia, piu' altro;
+% l'Utente Premium fa tutto quello che fa un Utente, piu' altro
+\umlinherit{Utente}{Membro famiglia}
+\umlinherit{Utente Premium}{Utente}
+
+% associazioni (disegnate sotto le ellissi)
+\begin{pgfonlayer}{background}
+\umlassoc[anchor2=180]{Visitatore}{reg}
+
+\umlassoc[anchor2=180]{Membro famiglia}{reg}
+\umlassoc[anchor2=180]{Membro famiglia}{man}
+\umlassoc[anchor2=180]{Membro famiglia}{exp}
+\umlassoc[anchor2=180]{Membro famiglia}{inv}
+\umlassoc[anchor2=180]{Membro famiglia}{qta}
+\umlassoc[anchor2=180]{Membro famiglia}{spesa}
+\umlassoc[anchor2=180]{Membro famiglia}{ric}
+\umlassoc[anchor2=180]{Membro famiglia}{cond}
+
+\umlassoc[anchor2=180]{Utente}{loc}
+\umlassoc[anchor2=180]{Utente}{prem}
+
+\umlassoc[anchor2=180]{Utente Premium}{stat}
+\end{pgfonlayer}
+
+% extend: dall'estensione verso il caso base
+\umlextend{scan}{man}
+\umlextend{notif}{exp}
+\umlextend{cerca}{inv}
+\umlextend{trasf}{spesa}
+
+% include: dal caso base verso il caso incluso
+\umlinclude{ric}{ingr}
+\umlinclude{ric}{prio}
+
+\end{tikzpicture}%
+}
+\end{center}
+
+\end{document}
