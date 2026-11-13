@@ -21,9 +21,7 @@ Autore: Tommaso Cremaschi.
 10. [Diagramma delle classi](#10-diagramma-delle-classi)
 11. [Coerenza tra i due diagrammi](#11-coerenza-tra-i-due-diagrammi)
 12. [Schermate e navigazione](#12-schermate-e-navigazione)
-13. [Linee guida grafiche](#13-linee-guida-grafiche)
-14. [Tecnologie](#14-tecnologie)
-15. [Versione gratuita e Premium](#15-versione-gratuita-e-premium)
+13. [Versione gratuita e Premium](#13-versione-gratuita-e-premium)
 
 ---
 
@@ -324,36 +322,7 @@ Alla prima apertura: schermata di presentazione («La tua casa, sempre sotto con
 
 ---
 
-## 13. Linee guida grafiche
-
-- **Il colore significa tempo:** è colorato solo ciò che sta per scadere (ambra a giorni, rosso oggi o scaduto). Tutto il resto è neutro, così l'occhio va dove serve.
-- **Colore del marchio** (verde acqua) solo per logo e azioni principali.
-- **Titoli con un carattere serif**, testi con un sans-serif: distingue HomeStock dalle app concorrenti, che usano tutte lo stesso stile arrotondato.
-- **Niente emoji nell'interfaccia:** un solo set di icone.
-- **Card con il filo di un ripiano** sotto le posizioni: l'unico elemento decorativo, preso dal soggetto.
-- Interfaccia moderna, pulita e semplice; animazioni leggere solo quando rispondono a un'azione.
-
----
-
-## 14. Tecnologie
-
-| Ambito | Scelta | Motivo |
-|---|---|---|
-| App | **React Native con Expo** (expo-router) | Una sola base di codice per Android, iOS e web |
-| Backend | **Supabase** (PostgreSQL, autenticazione, Row Level Security, realtime) | Gratuito fino a migliaia di utenti; la sicurezza per riga protegge i dati di ogni casa |
-| Scansione | expo-camera, codici EAN-13 / EAN-8 | Codici a barre commerciali, non QR code |
-| Dati prodotto | **API Open Food Facts** con cache locale | Gratuita, senza chiave, licenza ODbL (uso commerciale permesso con attribuzione) |
-| Notifiche | expo-notifications, notifiche **locali** | Nessun server, nessun costo, funzionano offline |
-| Ricette | Database interno con ingredienti canonici | Non esiste una fonte gratuita di ricette italiane strutturate |
-| Build e pubblicazione | EAS Build, Google Play Console, App Store Connect | Build in cloud senza Xcode o Android Studio |
-
-**Web o app:** la versione web (PWA) è la strada per il prototipo e i test rapidi; quella nativa è la versione finale. Nel browser la scansione funziona ma è meno affidabile (soprattutto su Safari iOS) e le notifiche su iOS richiedono di aggiungere il sito alla schermata Home.
-
-**Nessuna intelligenza artificiale a pagamento:** il confronto tra dispensa e ricette è una query sui dati.
-
----
-
-## 15. Versione gratuita e Premium
+## 13. Versione gratuita e Premium
 
 | Gratuita | Premium (futuro) |
 |---|---|
